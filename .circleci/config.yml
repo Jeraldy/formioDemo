@@ -1,0 +1,150 @@
+version: 2.1
+
+orbs:
+  aws-s3: circleci/aws-s3@3.0.0
+  aws-ecr: circleci/aws-ecr@7.3.0
+  aws-cli: circleci/aws-cli@2.1.0
+  aws-ecs: circleci/aws-ecs@3.2
+
+jobs:
+  backend-unit-test:
+    docker:
+      - image: circleci/node:16.13.1-bullseye-browsers-legacy
+      - image: mongo:4.1.6-xenial
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Waiting for Mongo
+          command: dockerize -wait tcp://localhost:27017 -timeout 1m
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "backend/yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: |
+            cd backend
+            yarn install --immutable
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "backend/yarn.lock" }}
+          paths:
+            - .yarn/cache
+            - .yarn/unplugged
+
+  build-and-deploy-frontend:
+    parameters:
+      uppercase_environment:
+        type: string
+      frontend_bucket:
+        type: string
+    docker:
+      - image: circleci/node:16.13.1-bullseye-browsers-legacy
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "frontend/yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: |
+            cd frontend
+            yarn install --immutable
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "frontend/yarn.lock" }}
+          paths:
+            - .yarn/cache
+            - .yarn/unplugged
+      - run:
+          name: Build React App
+          command: |
+            cd frontend
+            yarn build
+      - aws-s3/copy:
+          aws-access-key-id: AWS_ACCESS_KEY_ID_<< parameters.uppercase_environment >>
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY_<< parameters.uppercase_environment >>
+          aws-region: AWS_REGION_<< parameters.uppercase_environment >>
+          from: frontend/build/
+          to: 's3://<< parameters.frontend_bucket >>'
+          arguments: '--recursive'
+
+  build-backend:
+    parameters:
+      lowercase_environment:
+        type: string
+      uppercase_environment:
+        type: string
+    docker:
+      - image: circleci/node:16.13.1-bullseye-browsers-legacy
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - aws-ecr/build-and-push-image:
+          account-url: AWS_ECR_ACCOUNT_URL_<< parameters.uppercase_environment >>
+          aws-access-key-id: AWS_ACCESS_KEY_ID_<< parameters.uppercase_environment >>
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY_<< parameters.uppercase_environment >>
+          region: AWS_REGION_<< parameters.uppercase_environment >>
+          dockerfile: Dockerfile
+          tag: 'circleci-$CIRCLE_SHA1,<< parameters.lowercase_environment >>,latest'
+          path: backend/
+          repo: 'ecommerce-<< parameters.lowercase_environment >>-repo'
+  
+  deploy-backend:
+    parameters:
+      lowercase_environment:
+        type: string
+      uppercase_environment:
+        type: string
+    docker:
+      - image: cimg/python:3.10
+    steps:
+      - aws-cli/setup:
+          aws-access-key-id: AWS_ACCESS_KEY_ID_<< parameters.uppercase_environment >>
+          aws-region: AWS_REGION_<< parameters.uppercase_environment >>
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY_<< parameters.uppercase_environment >>
+      - aws-ecs/update-service:
+          cluster: ecommerce-01-<< parameters.lowercase_environment >>-cluster
+          service-name: webserver-01-<< parameters.lowercase_environment >>-service
+          family: webserver-<< parameters.lowercase_environment >>-task-definition
+          container-image-name-updates: 'container=ecommerce-container,image-and-tag=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION_<< parameters.uppercase_environment >>}.amazonaws.com/ecommerce-<< parameters.lowercase_environment >>-repo:latest'
+          force-new-deployment: true
+
+workflows:
+  version: 2
+  test-and-deploy:
+    jobs:
+      - backend-unit-test
+      - build-backend:
+          name: 'build-backend-dev'
+          lowercase_environment: 'dev'
+          uppercase_environment: 'DEV'
+          requires:
+            - backend-unit-test
+          filters:
+            branches:
+              only:
+                - develop
+      - deploy-backend:
+          name: 'deploy-backend-dev'
+          lowercase_environment: 'dev'
+          uppercase_environment: 'DEV'
+          requires:
+            - build-backend-dev
+          filters:
+            branches:
+              only:
+                - develop
+      - build-and-deploy-frontend:
+          name: 'build-and-deploy-frontend-dev'
+          uppercase_environment: 'DEV'
+          frontend_bucket: 'nunua'
+          requires:
+            - deploy-backend-dev
+          filters:
+            branches:
+              only:
+                - develop

@@ -1,0 +1,17 @@
+.menu{
+    display: flex;
+    flex-wrap: wrap;
+    height: 100vh;
+}
+
+.menu-item{
+    width: 49.5%;
+    border: 1px solid white;
+    text-align: center;
+    font-weight: bold;
+    background-color: rgb(233, 194, 233);
+}
+
+.menu-item:hover{
+    background-color: aliceblue;
+}
