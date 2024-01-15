@@ -14,7 +14,7 @@ const ListProductSubCategory = () => {
     const [showConfirmDelete, setConfirmDelete] = useState(false);
     const [isDeleting, setDeleting] = useState(false);
     const [id, setId] = useState(0);
-    const token = null;
+
     const showModal = () => {
         setIsModalOpen(!isModalOpen);
     };
@@ -22,7 +22,7 @@ const ListProductSubCategory = () => {
     const handleDelete = async () => {
         setDeleting(true);
         try {
-            const request = await DeleteProductSubCategory(token, id);
+            const request = await DeleteProductSubCategory(id);
             if (request.status === "success") {
                 setRefresh(!refresh);
                 notification.open({
@@ -66,7 +66,7 @@ const ListProductSubCategory = () => {
                 okButtonProps={{ loading: isDeleting, }}
                 onCancel={() => setConfirmDelete(false)}
             >
-               <Button type="link" onClick={() => confirmDelete(r._id)}><DeleteOutlined /></Button>
+                <Button type="link" onClick={() => confirmDelete(r._id)}><DeleteOutlined /></Button>
             </Popconfirm>
         )
     }

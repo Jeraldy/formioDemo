@@ -12,12 +12,11 @@ const AddNewProductCategory = ({ isOpen, toggleModel, refresh }) => {
     const [form] = Form.useForm();
     const [isCreating, setCreating] = useState(false);
 
-    const token = null;
     const onFinish = async (values) => {
         if (values) {
             setCreating(true);
             try {
-                const request = await CreateProductCategory(token, values);
+                const request = await CreateProductCategory(values);
                 if (request.status === "success") {
                     form.resetFields();
                     toggleModel();
@@ -26,7 +25,7 @@ const AddNewProductCategory = ({ isOpen, toggleModel, refresh }) => {
                         message: "Created succefully",
                         placement: 'top'
                     })
-                }else{
+                } else {
                     message.error(request.message)
                 }
             } catch (ex) {

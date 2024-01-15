@@ -14,7 +14,7 @@ const ListProductCategory = () => {
     const [showConfirmDelete, setConfirmDelete] = useState(false);
     const [isDeleting, setDeleting] = useState(false);
     const [id, setId] = useState(0);
-    const token = null;
+
     const showModal = () => {
         setIsModalOpen(!isModalOpen);
     };
@@ -22,7 +22,7 @@ const ListProductCategory = () => {
     const handleDelete = async () => {
         setDeleting(true);
         try {
-            const request = await DeleteProductCategory(token, id);
+            const request = await DeleteProductCategory(id);
             if (request.status === "success") {
                 setRefresh(!refresh);
                 notification.open({

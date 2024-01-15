@@ -1,8 +1,10 @@
 import React from 'react';
-import { Tabs } from 'antd';
+import { Button, Tabs } from 'antd';
 import ListProduct from './Product/ListProducts';
 import ListProductCategory from './Product/ListProductCategory';
 import ListProductSubCategory from './Product/ListProductSubCategory';
+import useSignOut from 'react-auth-kit/hooks/useSignOut';
+import { useNavigate } from 'react-router-dom';
 
 const TABS = [
   { c: <ListProduct />, l: "SALE" },
@@ -12,6 +14,14 @@ const TABS = [
 ]
 
 const Home = () => {
+  const signOut = useSignOut();
+  const navigate = useNavigate();
+
+  const signOutAction = () => {
+    localStorage.clear();
+    signOut()
+    navigate('/login')
+  }
 
   return (
     <div style={{
@@ -19,6 +29,7 @@ const Home = () => {
       justifyContent: 'center',
       paddingLeft: "10px",
     }}>
+      <Button onClick={signOutAction}>LOGOUT</Button>
       <Tabs
         tabPosition='top'
         items={TABS.map((tab) => {

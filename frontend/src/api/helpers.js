@@ -1,10 +1,10 @@
 
-export const makeApiCallAuthenticated = async (method, path, body, token) => {
+export const makeApiCallAuthenticated = async (method, path, body) => {
 
   try {
 
     const headers = {
-      Authorization: `Bearer ${token || _token}`,
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json'
     }
@@ -39,6 +39,4 @@ export const makeApiCall = async (method, path, body) => {
   return Promise.resolve();
 };
 
-const url = (path) => `http://192.168.118.10:8080/api/v1/${path}`
-const _token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NTg4ZjdjMWI2YmE5MTljZmQxMTQ4NSIsImlhdCI6MTcwMDQ4MTIwNSwiZXhwIjoxNzA4MjU3MjA1fQ.z9GMXfNtl5S34u3mjLYB5qjn5bjAqEtiWsvqsWrd_7k"
-//const url = (path) => `http://ecommerce-dev-1572531343.us-east-1.elb.amazonaws.com/api/v1/${path}`
+const url = (path) => `http://localhost:8080/api/v1/${path}`;

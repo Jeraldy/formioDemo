@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, InputNumber, Modal, Select, message, notification } from 'antd';
 import { CreateProduct, GetProductCategory, GetProductSubCategory } from '../../api/Product';
+
 const { Option } = Select
 
 const okButtonProps = {
@@ -9,29 +10,23 @@ const okButtonProps = {
 }
 
 const AddNewProduct = ({ isOpen, toggleModel, refresh }) => {
-
     const [form] = Form.useForm();
     const [categories, setCategory] = useState([]);
     const [subCategories, setSubCategory] = useState([]);
     const [isCreating, setCreating] = useState(false);
 
-    const token = null;
-
     useEffect(() => {
         const fetchCategory = async () => {
-            const response = await GetProductCategory(token);
+            const response = await GetProductCategory();
             if (response.data) {
                 setCategory(response.data)
             }
         }
-        fetchCategory()
+        fetchCategory();
     }, []);
 
     const handleCategoryChange = async (categoryId) => {
-        const response = await GetProductSubCategory(
-            token,
-            `categoryId=${categoryId}`
-        );
+        const response = await GetProductSubCategory(`categoryId=${categoryId}`);
         if (response.data) {
             setSubCategory(response.data)
         }
@@ -41,7 +36,8 @@ const AddNewProduct = ({ isOpen, toggleModel, refresh }) => {
         if (values) {
             setCreating(true);
             try {
-                const request = await CreateProduct(token, values);
+                const request = await CreateProduct(values);
+
                 if (request.status === "success") {
                     form.resetFields();
                     toggleModel();
@@ -141,12 +137,9 @@ const AddNewProduct = ({ isOpen, toggleModel, refresh }) => {
 };
 
 const MoneyInput = () => {
-    const [value, setValue] = useState()
     return <InputNumber
         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
         parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-        value={value}
-        onChange={setValue}
     />
 }
 export default AddNewProduct;

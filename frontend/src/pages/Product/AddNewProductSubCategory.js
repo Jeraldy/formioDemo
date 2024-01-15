@@ -13,11 +13,10 @@ const AddNewProductSubCategory = ({ isOpen, toggleModel, refresh }) => {
     const [form] = Form.useForm();
     const [isCreating, setCreating] = useState(false);
     const [data, setData] = useState([]);
-    const token = null;
-
+    
     useEffect(() => {
         const fetchCategory = async () => {
-            const response = await GetProductCategory(token);
+            const response = await GetProductCategory();
             if (response.data) {
                 setData(response.data)
             }
@@ -29,7 +28,7 @@ const AddNewProductSubCategory = ({ isOpen, toggleModel, refresh }) => {
         if (values) {
             setCreating(true);
             try {
-                const request = await CreateProductSubCategory(token, values);
+                const request = await CreateProductSubCategory(values);
                 if (request.status === "success") {
                     form.resetFields();
                     toggleModel();

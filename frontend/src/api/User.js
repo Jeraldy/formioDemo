@@ -1,4 +1,4 @@
 import { makeApiCall, makeApiCallAuthenticated } from './helpers';
 
-export const Login = (email, password) => makeApiCall('POST', 'user/login', { email, password });
-export const GetUsers = (token) => makeApiCallAuthenticated('GET', 'user', {}, token);
+export const Login = (payload) => makeApiCall('POST', 'user/login', payload);
+export const GetUsers = () => makeApiCallAuthenticated('GET', 'user', {});
