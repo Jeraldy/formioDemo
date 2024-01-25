@@ -7,21 +7,21 @@ const router = express.Router();
 
 router
 .route('/')
-.get(controller.getAll)
+.get(controller.getAllSells)
 .post(
     authController.protect,
     authController.restrictTo('admin'),
     controller.validateSell,
-    controller.create,
-    controller.decrementProduct);
+    controller.decrementProduct,
+    controller.createSell);
 
 router
 .route('/:id')
-.get(controller.getOne)
+.get(controller.getSell)
 .delete(
     authController.protect,
     authController.restrictTo('admin'),
-    controller.delete,
-    controller.incrementProduct);
+    controller.incrementProduct,
+    controller.deleteSell);
 
 module.exports = router;

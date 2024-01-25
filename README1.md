@@ -17,5 +17,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 To start all services, run `docker-compose up`.
 
+- Sell page
+- Create users page
+- Improve ui
+
 
 

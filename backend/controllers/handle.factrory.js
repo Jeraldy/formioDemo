@@ -36,6 +36,15 @@ const createOne = Model =>
     res.status(201).json({ status: 'success', data });
   });
 
+const createMany = Model =>
+  catchAsync(async (req, res, next) => {
+    if (req.user) {
+      req.body = req.body.map(item => ({ ...item, createdBy: req.user._id }))
+    }
+    const data = await Model.insertMany(req.body);
+    res.status(201).json({ status: 'success', data });
+  });
+
 const getOne = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {
     let query = Model.findById(req.params.id);
@@ -60,7 +69,7 @@ const getAll = (Model, popOptions) =>
       .sort()
       .limitFields()
       .paginate();
-      let query = features.query
+    let query = features.query
     if (popOptions) {
       query = query.populate(popOptions)
     };
@@ -72,6 +81,7 @@ const getAll = (Model, popOptions) =>
 
 const CRUD = (Model, popOptions) => ({
   create: createOne(Model),
+  createMany: createMany(Model),
   update: updateOne(Model),
   delete: deleteOne(Model),
   getAll: getAll(Model, popOptions),
@@ -79,6 +89,7 @@ const CRUD = (Model, popOptions) => ({
 });
 
 module.exports = {
+  createMany,
   createOne,
   updateOne,
   deleteOne,

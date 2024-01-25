@@ -5,12 +5,15 @@ import ListProductCategory from './Product/ListProductCategory';
 import ListProductSubCategory from './Product/ListProductSubCategory';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
 import { useNavigate } from 'react-router-dom';
+import ListProductSell from './Product/ListProductSell';
+import ListProductSold from './Product/ListProductSold';
 
 const TABS = [
-  { c: <ListProduct />, l: "SALE" },
+  { c: <ListProductSell />, l: "SALE" },
   { c: <ListProduct />, l: "ADD" },
   { c: <ListProductCategory />, l: "CATEGORY" },
-  { c: <ListProductSubCategory />, l: "SUBCATEGORY" }
+  { c: <ListProductSubCategory />, l: "SUBCATEGORY" },
+  { c: <ListProductSold />, l: "SOLD" },
 ]
 
 const Home = () => {

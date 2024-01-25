@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, InputNumber, Modal, Select, message, notification } from 'antd';
-import { CreateProduct, GetProductCategory, GetProductSubCategory } from '../../api/Product';
+import { CreateProduct, GetProductCategory, GetProductSubCategory, UpdateProduct } from '../../api/Product';
 
 const { Option } = Select
 
@@ -9,17 +9,26 @@ const okButtonProps = {
     form: "form"
 }
 
-const AddNewProduct = ({ isOpen, toggleModel, refresh }) => {
+const AddNewProduct = ({ isOpen, toggleModel, refresh, product }) => {
+
     const [form] = Form.useForm();
     const [categories, setCategory] = useState([]);
     const [subCategories, setSubCategory] = useState([]);
     const [isCreating, setCreating] = useState(false);
 
     useEffect(() => {
+        if (product) {
+            form.setFieldsValue(product);
+            handleCategoryChange(product.categoryId)
+        }
+    }, [product])
+
+    useEffect(() => {
         const fetchCategory = async () => {
             const response = await GetProductCategory();
-            if (response.data) {
-                setCategory(response.data)
+            if (response?.data) {
+                setCategory(response.data);
+
             }
         }
         fetchCategory();
@@ -28,7 +37,7 @@ const AddNewProduct = ({ isOpen, toggleModel, refresh }) => {
     const handleCategoryChange = async (categoryId) => {
         const response = await GetProductSubCategory(`categoryId=${categoryId}`);
         if (response.data) {
-            setSubCategory(response.data)
+            setSubCategory(response.data);
         }
     }
 
@@ -36,14 +45,16 @@ const AddNewProduct = ({ isOpen, toggleModel, refresh }) => {
         if (values) {
             setCreating(true);
             try {
-                const request = await CreateProduct(values);
+
+                const request = await (product ? UpdateProduct(product._id, values)
+                    : CreateProduct(values));
 
                 if (request.status === "success") {
                     form.resetFields();
                     toggleModel();
                     refresh();
                     notification.open({
-                        message: "Created succefully",
+                        message: "Completed succefully!",
                         placement: 'top'
                     })
                 } else {
@@ -61,7 +72,7 @@ const AddNewProduct = ({ isOpen, toggleModel, refresh }) => {
             title="Create Product"
             open={isOpen}
             onOk={() => onFinish()}
-            okText="Save"
+            okText={product ? "UPDATE" : "CREATE"}
             onCancel={toggleModel}
             okButtonProps={okButtonProps}
             confirmLoading={isCreating}
@@ -84,7 +95,8 @@ const AddNewProduct = ({ isOpen, toggleModel, refresh }) => {
                     label="Category"
                     rules={[{ required: true, }]}
                 >
-                    <Select placeholder="Select product category."
+                    <Select
+                        placeholder="Select product category."
                         onChange={handleCategoryChange}
                     >
                         {categories.map(cat => (
@@ -113,14 +125,14 @@ const AddNewProduct = ({ isOpen, toggleModel, refresh }) => {
                 <Form.Item
                     name="buyingPrice"
                     label="Buying Price"
-                    rules={[{ required: true, },]}
+                    rules={[{ required: true }]}
                 >
                     <MoneyInput />
                 </Form.Item>
                 <Form.Item
                     name="sellingPrice"
                     label="Selling Price"
-                    rules={[{ required: true, }]}
+                    rules={[{ required: true }]}
                 >
                     <MoneyInput />
                 </Form.Item>
@@ -136,10 +148,11 @@ const AddNewProduct = ({ isOpen, toggleModel, refresh }) => {
     );
 };
 
-const MoneyInput = () => {
+const MoneyInput = ({ value }) => {
     return <InputNumber
         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
         parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+        value={value}
     />
 }
 export default AddNewProduct;

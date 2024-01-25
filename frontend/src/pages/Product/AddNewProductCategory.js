@@ -1,28 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Input, Modal, message, notification } from 'antd';
-import { CreateProductCategory } from '../../api/Product';
+import { CreateProductCategory, UpdateProductCategory } from '../../api/Product';
 
 const okButtonProps = {
     htmlType: "submit",
     form: "form"
 }
 
-const AddNewProductCategory = ({ isOpen, toggleModel, refresh }) => {
+const AddNewProductCategory = ({ isOpen, toggleModel, refresh, category }) => {
 
     const [form] = Form.useForm();
     const [isCreating, setCreating] = useState(false);
+
+
+    useEffect(() => {
+        if (category) {
+            form.setFieldsValue(category);
+        }
+    }, [category]);
 
     const onFinish = async (values) => {
         if (values) {
             setCreating(true);
             try {
-                const request = await CreateProductCategory(values);
+                const request = await (
+                    category ? UpdateProductCategory(category._id, values)
+                        : CreateProductCategory(values));
                 if (request.status === "success") {
                     form.resetFields();
                     toggleModel();
                     refresh();
                     notification.open({
-                        message: "Created succefully",
+                        message: "Completed succefully",
                         placement: 'top'
                     })
                 } else {
@@ -40,7 +49,7 @@ const AddNewProductCategory = ({ isOpen, toggleModel, refresh }) => {
             title="Create Product Category"
             open={isOpen}
             onOk={() => onFinish()}
-            okText="Save"
+            okText={category ? "UPDATE" : "CREATE"}
             onCancel={toggleModel}
             okButtonProps={okButtonProps}
             confirmLoading={isCreating}

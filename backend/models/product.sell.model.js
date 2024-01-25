@@ -9,12 +9,12 @@ const ProductSellSchema = new mongoose.Schema({
     },
     sellingPrice: {
         type: Number,
-        default: 0,
+        required: [true, "Selling price is required!"],
         min: 0
     },
     quantity: {
         type: Number,
-        default: 0,
+        required: [true, "Quantity is required!"],
         min: 0
     },
     ...commonModel,

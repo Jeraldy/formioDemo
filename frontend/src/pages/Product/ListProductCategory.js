@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Popconfirm, notification, message } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { DeleteProductCategory, GetProductCategory } from '../../api/Product';
 import { PROD_CATEGORY_COL } from './utils';
 import AddNewProductCategory from './AddNewProductCategory';
@@ -13,6 +13,7 @@ const ListProductCategory = () => {
     const [refresh, setRefresh] = useState(false);
     const [showConfirmDelete, setConfirmDelete] = useState(false);
     const [isDeleting, setDeleting] = useState(false);
+    const [category, setCategory] = useState();
     const [id, setId] = useState(0);
 
     const showModal = () => {
@@ -46,7 +47,7 @@ const ListProductCategory = () => {
     useEffect(() => {
         const fetchData = async () => {
             const response = await GetProductCategory();
-            if (response.data) {
+            if (response?.data) {
                 const d = response.data.map((k, i) => {
                     return { ...k, index: i + 1, key: k.name }
                 })
@@ -72,13 +73,25 @@ const ListProductCategory = () => {
         )
     }
 
+
+    const handleEdit = (product)=>{
+        setCategory(product);
+        showModal();
+    }
+
+    const editComp = (r) => {
+        return (
+            <Button type="link" onClick={() => handleEdit(r)}><EditOutlined /></Button>
+        )
+    }
+
     return (
         <div>
             <Button type="primary" onClick={showModal}>
                 Add
             </Button>
             <Table
-                columns={PROD_CATEGORY_COL(deleteComp)}
+                columns={PROD_CATEGORY_COL(deleteComp,editComp)}
                 size="small"
                 dataSource={data}
             />
@@ -86,6 +99,7 @@ const ListProductCategory = () => {
                 isOpen={isModalOpen}
                 toggleModel={showModal}
                 refresh={() => setRefresh(!refresh)}
+                category={category}
             />
         </div>
     );

@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Popconfirm, notification, message } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { DeleteProduct, GetProducts } from '../../api/Product';
-import { PROD_COL } from './utils';
+import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteProductSell, GetProductSell } from '../../api/Product';
+import { PROD_SELL_COL } from './utils';
 import AddNewProduct from './AddNewProduct';
 
 
-const ListProduct = () => {
+const ListProductSold = () => {
 
     const [data, setData] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [refresh, setRefresh] = useState(false);
     const [showConfirmDelete, setConfirmDelete] = useState(false);
     const [isDeleting, setDeleting] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState();
     const [id, setId] = useState(0);
 
     const showModal = () => {
@@ -23,7 +22,7 @@ const ListProduct = () => {
     const handleDelete = async () => {
         setDeleting(true);
         try {
-            const request = await DeleteProduct(id);
+            const request = await DeleteProductSell(id);
             if (request.status === "success") {
                 setRefresh(!refresh);
                 notification.open({
@@ -45,12 +44,18 @@ const ListProduct = () => {
     }
 
     useEffect(() => {
-        setSelectedProduct(null);
         const fetchData = async () => {
-            const response = await GetProducts();
+            const response = await GetProductSell();
             if (response?.data) {
                 const d = response.data.map((k, i) => {
-                    return { ...k, index: i + 1, key: k.name }
+                    return {
+                        ...k.productId,
+                        _id: k._id,
+                        quantity: k.quantity,
+                        sellingPrice: (k.quantity*k.sellingPrice),
+                        index: i + 1,
+                        key: k.name
+                    }
                 })
                 setData(d)
             }
@@ -73,17 +78,6 @@ const ListProduct = () => {
         )
     }
 
-    const handleEdit = (product)=>{
-        setSelectedProduct(product);
-        showModal();
-    }
-
-    const editComp = (r) => {
-        return (
-            <Button type="link" onClick={() => handleEdit(r)}><EditOutlined /></Button>
-        )
-    }
-
     return (
         <div>
             <div style={{
@@ -96,7 +90,7 @@ const ListProduct = () => {
                 </Button>
             </div>
             <Table
-                columns={PROD_COL(deleteComp, editComp)}
+                columns={PROD_SELL_COL(deleteComp)}
                 size="small"
                 dataSource={data}
             />
@@ -104,10 +98,9 @@ const ListProduct = () => {
                 isOpen={isModalOpen}
                 toggleModel={showModal}
                 refresh={() => setRefresh(!refresh)}
-                product={selectedProduct}
             />
         </div>
     );
 }
 
-export default ListProduct;
+export default ListProductSold;

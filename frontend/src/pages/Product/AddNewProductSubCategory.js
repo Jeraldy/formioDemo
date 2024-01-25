@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Modal, Select, message, notification } from 'antd';
-import { CreateProductSubCategory, GetProductCategory } from '../../api/Product';
+import { CreateProductSubCategory, GetProductCategory, UpdateProductSubCategory } from '../../api/Product';
 const { Option } = Select;
 
 const okButtonProps = {
@@ -8,12 +8,21 @@ const okButtonProps = {
     form: "form"
 }
 
-const AddNewProductSubCategory = ({ isOpen, toggleModel, refresh }) => {
+const AddNewProductSubCategory = ({ isOpen, toggleModel, refresh, subCategory }) => {
 
     const [form] = Form.useForm();
     const [isCreating, setCreating] = useState(false);
     const [data, setData] = useState([]);
-    
+
+    useEffect(() => {
+        if (subCategory) {
+            form.setFieldsValue({
+                name: subCategory.name,
+                categoryId: subCategory.categoryId._id
+            });
+        }
+    }, [subCategory]);
+
     useEffect(() => {
         const fetchCategory = async () => {
             const response = await GetProductCategory();
@@ -28,13 +37,17 @@ const AddNewProductSubCategory = ({ isOpen, toggleModel, refresh }) => {
         if (values) {
             setCreating(true);
             try {
-                const request = await CreateProductSubCategory(values);
+                const request = await (
+                    subCategory ? UpdateProductSubCategory(subCategory._id, values)
+                        : CreateProductSubCategory(values)
+                );
+
                 if (request.status === "success") {
                     form.resetFields();
                     toggleModel();
                     refresh();
                     notification.open({
-                        message: "Created succefully",
+                        message: "Completed succefully!",
                         placement: 'top'
                     })
                 } else {
@@ -52,7 +65,7 @@ const AddNewProductSubCategory = ({ isOpen, toggleModel, refresh }) => {
             title="Create Product Sub Category"
             open={isOpen}
             onOk={() => onFinish()}
-            okText="Save"
+            okText={subCategory ? "UPDATE" : "CREATE"}
             onCancel={toggleModel}
             okButtonProps={okButtonProps}
             confirmLoading={isCreating}
@@ -66,7 +79,7 @@ const AddNewProductSubCategory = ({ isOpen, toggleModel, refresh }) => {
                 <Form.Item
                     name="name"
                     label="Sub Category Name"
-                    rules={[{ required: true, },]}
+                    rules={[{ required: true, }]}
                 >
                     <Input />
                 </Form.Item>
