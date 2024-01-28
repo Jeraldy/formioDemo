@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Popconfirm, notification, message } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { DeleteProductSubCategory, GetProductSubCategory } from '../../api/Product';
-import { PROD_SUB_CATEGORY_COL } from './utils';
-import AddNewProductSubCategory from './AddNewProductSubCategory';
+import { DeleteProduct, GetProducts } from '../../../api/Product';
+import { PROD_COL } from '../utils';
+import AddNewProduct from '../Forms/AddNewProduct';
 
-const ListProductSubCategory = () => {
+
+const ListProduct = () => {
 
     const [data, setData] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [refresh, setRefresh] = useState(false);
     const [showConfirmDelete, setConfirmDelete] = useState(false);
     const [isDeleting, setDeleting] = useState(false);
-    const [subCategory, setSelectedSubCategory] = useState();
+    const [selectedProduct, setSelectedProduct] = useState();
     const [id, setId] = useState(0);
 
     const showModal = () => {
@@ -22,7 +23,7 @@ const ListProductSubCategory = () => {
     const handleDelete = async () => {
         setDeleting(true);
         try {
-            const request = await DeleteProductSubCategory(id);
+            const request = await DeleteProduct(id);
             if (request.status === "success") {
                 setRefresh(!refresh);
                 notification.open({
@@ -44,14 +45,12 @@ const ListProductSubCategory = () => {
     }
 
     useEffect(() => {
+        setSelectedProduct(null);
         const fetchData = async () => {
-            const response = await GetProductSubCategory();
+            const response = await GetProducts();
             if (response?.data) {
                 const d = response.data.map((k, i) => {
-                    return {
-                        ...k, index: i + 1,
-                        key: k.name, category: k.categoryId.name
-                    }
+                    return { ...k, index: i + 1, key: k.name }
                 })
                 setData(d)
             }
@@ -74,8 +73,8 @@ const ListProductSubCategory = () => {
         )
     }
 
-    const handleEdit = (record) => {
-        setSelectedSubCategory(record);
+    const handleEdit = (product)=>{
+        setSelectedProduct(product);
         showModal();
     }
 
@@ -87,22 +86,28 @@ const ListProductSubCategory = () => {
 
     return (
         <div>
-            <Button type="primary" onClick={showModal}>
-                Add
-            </Button>
+            <div style={{
+                display: "flex",
+                justifyContent: "space-between",
+                paddingRight: "10px",
+            }}>
+                <Button type="primary" onClick={showModal}>
+                    Add
+                </Button>
+            </div>
             <Table
-                columns={PROD_SUB_CATEGORY_COL(deleteComp, editComp)}
+                columns={PROD_COL(deleteComp, editComp)}
                 size="small"
                 dataSource={data}
             />
-            <AddNewProductSubCategory
+            <AddNewProduct
                 isOpen={isModalOpen}
                 toggleModel={showModal}
                 refresh={() => setRefresh(!refresh)}
-                subCategory={subCategory}
+                product={selectedProduct}
             />
         </div>
     );
 }
 
-export default ListProductSubCategory;
+export default ListProduct;

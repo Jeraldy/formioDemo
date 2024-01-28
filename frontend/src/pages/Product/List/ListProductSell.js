@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Input } from 'antd';
-import { GetProducts } from '../../api/Product';
-import { PROD_SELL_COL } from './utils';
-import ShoppingCart from '../ShoppingCart';
+import { GetProducts } from '../../../api/Product';
+import { PROD_SELL_COL } from '../utils';
+import ShoppingCart from '../../ShoppingCart';
 const { Search } = Input;
 
 const ListProductSell = () => {

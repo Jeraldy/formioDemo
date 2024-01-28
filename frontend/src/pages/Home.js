@@ -1,19 +1,20 @@
 import React from 'react';
 import { Button, Tabs } from 'antd';
-import ListProduct from './Product/ListProducts';
-import ListProductCategory from './Product/ListProductCategory';
-import ListProductSubCategory from './Product/ListProductSubCategory';
+import ListProduct from './Product/List/ListProducts';
+import ListProductCategory from './Product/List/ListProductCategory';
+import ListProductSubCategory from './Product/List/ListProductSubCategory';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
 import { useNavigate } from 'react-router-dom';
-import ListProductSell from './Product/ListProductSell';
-import ListProductSold from './Product/ListProductSold';
+import ListProductSell from './Product/List/ListProductSell';
+import ListProductSold from './Product/List/ListProductSold';
+import { LogoutOutlined } from '@ant-design/icons';
 
 const TABS = [
   { c: <ListProductSell />, l: "SALE" },
-  { c: <ListProduct />, l: "ADD" },
+  { c: <ListProduct />, l: "PRODUCTS" },
   { c: <ListProductCategory />, l: "CATEGORY" },
   { c: <ListProductSubCategory />, l: "SUBCATEGORY" },
-  { c: <ListProductSold />, l: "SOLD" },
+  { c: <ListProductSold />, l: "REPORT" },
 ]
 
 const Home = () => {
@@ -27,22 +28,33 @@ const Home = () => {
   }
 
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'center',
-      paddingLeft: "10px",
-    }}>
-      <Button onClick={signOutAction}>LOGOUT</Button>
-      <Tabs
-        tabPosition='top'
-        items={TABS.map((tab) => {
-          return {
-            label: tab.l,
-            key: tab.l,
-            children: tab.c,
-          };
-        })}
-      />
+    <div >
+      <div style={{
+        backgroundColor: "green",
+        display: "flex",
+        justifyContent: "flex-end",
+        padding: "6px"
+      }}>
+        <Button onClick={signOutAction} style={{
+          backgroundColor: "transparent",
+          color: "white",
+          border: "none"
+        }}>
+          <LogoutOutlined />
+        </Button>
+      </div>
+      <div style={{ padding: "0 10px"}}>
+        <Tabs
+          tabPosition='top'
+          items={TABS.map((tab) => {
+            return {
+              label: tab.l,
+              key: tab.l,
+              children: tab.c,
+            };
+          })}
+        />
+      </div>
     </div>
   );
 };

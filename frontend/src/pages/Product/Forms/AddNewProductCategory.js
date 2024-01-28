@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Modal, message, notification } from 'antd';
-import { CreateProductCategory, UpdateProductCategory } from '../../api/Product';
+import { CreateProductCategory, UpdateProductCategory } 
+from '../../../api/Product';
 
 const okButtonProps = {
     htmlType: "submit",
@@ -17,7 +18,7 @@ const AddNewProductCategory = ({ isOpen, toggleModel, refresh, category }) => {
         if (category) {
             form.setFieldsValue(category);
         }
-    }, [category]);
+    }, [category, form]);
 
     const onFinish = async (values) => {
         if (values) {

@@ -38,5 +38,5 @@ export const makeApiCall = async (method, path, body) => {
   }
   return Promise.resolve();
 };
-const url = (path) => `http://192.168.137.91:8080/api/v1/${path}`;
- //const url = (path) => `http://localhost:8080/api/v1/${path}`;
+//const url = (path) => `http://192.168.137.91:8080/api/v1/${path}`;
+const url = (path) => `http://localhost:8080/api/v1/${path}`;

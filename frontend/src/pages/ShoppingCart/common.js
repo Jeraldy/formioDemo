@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Form, Input, Popconfirm } from 'antd';
+import { Button, Form, Input, Popconfirm } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 
 export const EditableCell = ({
@@ -99,7 +99,7 @@ export const SHOPPING_CART = (handleDelete, dataSource) => {
       render: (_, record) =>
         dataSource.length >= 1 ? (
           <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
-            <a><DeleteOutlined /></a>
+            <Button type='link'><DeleteOutlined /></Button>
           </Popconfirm>
         ) : null,
     },

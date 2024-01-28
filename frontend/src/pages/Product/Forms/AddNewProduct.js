@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, InputNumber, Modal, Select, message, notification } from 'antd';
-import { CreateProduct, GetProductCategory, GetProductSubCategory, UpdateProduct } from '../../api/Product';
+import { CreateProduct, GetProductCategory, GetProductSubCategory, UpdateProduct } 
+from '../../../api/Product';
 
 const { Option } = Select
 
@@ -21,7 +22,7 @@ const AddNewProduct = ({ isOpen, toggleModel, refresh, product }) => {
             form.setFieldsValue(product);
             handleCategoryChange(product.categoryId)
         }
-    }, [product])
+    }, [product, form])
 
     useEffect(() => {
         const fetchCategory = async () => {
@@ -66,6 +67,8 @@ const AddNewProduct = ({ isOpen, toggleModel, refresh, product }) => {
             setCreating(false);
         }
     }
+
+    const moneyProps = { formatter, parser}
 
     return (
         <Modal
@@ -127,32 +130,29 @@ const AddNewProduct = ({ isOpen, toggleModel, refresh, product }) => {
                     label="Buying Price"
                     rules={[{ required: true }]}
                 >
-                    <MoneyInput />
+                   <InputNumber {...moneyProps} />
                 </Form.Item>
                 <Form.Item
                     name="sellingPrice"
                     label="Selling Price"
                     rules={[{ required: true }]}
                 >
-                    <MoneyInput />
+                    <InputNumber {...moneyProps} />
                 </Form.Item>
                 <Form.Item
                     name="quantity"
                     label="Quantity"
                     rules={[{ required: true, }]}
                 >
-                    <MoneyInput />
+                    <InputNumber {...moneyProps}/>
                 </Form.Item>
             </Form>
         </Modal>
     );
 };
 
-const MoneyInput = ({ value }) => {
-    return <InputNumber
-        formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-        parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-        value={value}
-    />
-}
+
+const formatter = (value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+const parser = (value) => value.replace(/\$\s?|(,*)/g, '')
+
 export default AddNewProduct;

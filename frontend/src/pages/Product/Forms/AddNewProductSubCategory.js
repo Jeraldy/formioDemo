@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Modal, Select, message, notification } from 'antd';
-import { CreateProductSubCategory, GetProductCategory, UpdateProductSubCategory } from '../../api/Product';
+import { CreateProductSubCategory, GetProductCategory, UpdateProductSubCategory } 
+from '../../../api/Product';
+
 const { Option } = Select;
 
 const okButtonProps = {
@@ -21,7 +23,7 @@ const AddNewProductSubCategory = ({ isOpen, toggleModel, refresh, subCategory })
                 categoryId: subCategory.categoryId._id
             });
         }
-    }, [subCategory]);
+    }, [subCategory, form]);
 
     useEffect(() => {
         const fetchCategory = async () => {
