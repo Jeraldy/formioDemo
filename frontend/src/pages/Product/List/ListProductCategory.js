@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Popconfirm, notification, message } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { DeleteProductCategory, GetProductCategory } from '../../../api/Product';
+import { DeleteProductCategory } from '../../../api/Product';
 import { PROD_CATEGORY_COL } from '../utils';
 import AddNewProductCategory from '../Forms/AddNewProductCategory';
+import { fetchProductCategory } from '../../../api/utils';
 
 
 const ListProductCategory = () => {
@@ -45,16 +46,7 @@ const ListProductCategory = () => {
     }
 
     useEffect(() => {
-        const fetchData = async () => {
-            const response = await GetProductCategory();
-            if (response?.data) {
-                const d = response.data.map((k, i) => {
-                    return { ...k, index: i + 1, key: k.name }
-                })
-                setData(d)
-            }
-        }
-        fetchData();
+        fetchProductCategory(setData)
     }, [refresh]);
 
     const deleteComp = (r) => {

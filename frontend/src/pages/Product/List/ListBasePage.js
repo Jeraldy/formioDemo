@@ -49,6 +49,7 @@ const ListBasePage = ({
                 columns={colums(deleteComp)}
                 size="small"
                 dataSource={data}
+                bordered={true}
             />
         </div>
     );

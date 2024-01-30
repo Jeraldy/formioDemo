@@ -18,12 +18,12 @@ app.use(helmet());
 app.use(express.json());
 
 // Limit requests from same API
-const limiter = rateLimit({
-    max: 1000, //num of requests
-    windowMs: 60 * 60 * 1000, // Per one hour
-    message: 'Too many requests from this IP, please try again in an hour!'
-});
-app.use('/api', limiter);
+// const limiter = rateLimit({
+//     max: 1000, //num of requests
+//     windowMs: 60 * 60 * 1000, // Per one hour
+//     message: 'Too many requests from this IP, please try again in an hour!'
+// });
+// app.use('/api', limiter);
 
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());

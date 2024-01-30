@@ -77,25 +77,30 @@ export const SHOPPING_CART = (handleDelete, dataSource) => {
     {
       title: 'Name',
       dataIndex: 'name',
-    },
-    {
-      title: 'Price',
-      dataIndex: 'sellingPrice',
-      render: (r) => parseInt(r).toLocaleString()
-    },
-    {
-      title: 'Total',
-      dataIndex: 'total',
-      render: (r) => parseInt(r).toLocaleString()
+      width: 10,
     },
     {
       title: 'Qty.',
       dataIndex: 'qty',
-      editable: true
+      editable: true,
+      width: 5,
+    },
+    {
+      title: 'Price',
+      dataIndex: 'sellingPrice',
+      render: (r) => parseInt(r).toLocaleString(),
+      width: 5,
+    },
+    {
+      title: 'Total',
+      dataIndex: 'total',
+      render: (r) => parseInt(r).toLocaleString(),
+      width: 5,
     },
     {
       title: '',
       dataIndex: '',
+      width: 3,
       render: (_, record) =>
         dataSource.length >= 1 ? (
           <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>

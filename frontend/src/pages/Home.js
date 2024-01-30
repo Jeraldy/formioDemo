@@ -9,13 +9,19 @@ import ListProductSell from './Product/List/ListProductSell';
 import ListProductSold from './Product/List/ListProductSold';
 import { LogoutOutlined } from '@ant-design/icons';
 
-const TABS = [
-  { c: <ListProductSell />, l: "SALE" },
+
+const _RESTRICTED = [
   { c: <ListProduct />, l: "PRODUCTS" },
   { c: <ListProductCategory />, l: "CATEGORY" },
   { c: <ListProductSubCategory />, l: "SUBCATEGORY" },
+]
+
+const TABS = [
+  { c: <ListProductSell />, l: "SALE" },
   { c: <ListProductSold />, l: "REPORT" },
 ]
+
+
 
 const Home = () => {
   const signOut = useSignOut();
@@ -27,26 +33,34 @@ const Home = () => {
     navigate('/login')
   }
 
+  const userRole = localStorage.getItem("role");
+  let pages = TABS;
+  if(userRole === "admin"){
+    pages = [...TABS, ..._RESTRICTED]
+  }
   return (
     <div >
       <div style={{
         backgroundColor: "green",
         display: "flex",
-        justifyContent: "flex-end",
-        padding: "6px"
+        justifyContent: "space-between",
+        padding: "6px",
+        color: "white",
+        textTransform: 'capitalize'
       }}>
+        <div>{localStorage.getItem("role")}</div>
         <Button onClick={signOutAction} style={{
           backgroundColor: "transparent",
+          border: "none",
           color: "white",
-          border: "none"
         }}>
           <LogoutOutlined />
         </Button>
       </div>
-      <div style={{ padding: "0 10px"}}>
+      <div style={{ padding: "0 10px" }}>
         <Tabs
           tabPosition='top'
-          items={TABS.map((tab) => {
+          items={pages.map((tab) => {
             return {
               label: tab.l,
               key: tab.l,

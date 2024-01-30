@@ -46,7 +46,6 @@ const AddNewProduct = ({ isOpen, toggleModel, refresh, product }) => {
         if (values) {
             setCreating(true);
             try {
-
                 const request = await (product ? UpdateProduct(product._id, values)
                     : CreateProduct(values));
 

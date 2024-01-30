@@ -19,7 +19,8 @@ const LoginPage = () => {
         // expiresIn: response.data.expiresIn,
         authState: { ...response.data },
       })) {
-        localStorage.setItem('token', response.token)
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('role', response.data.role)
         navigate('/')
       } else {
         message.error("Invalid username or password");

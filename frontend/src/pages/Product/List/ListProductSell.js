@@ -59,6 +59,7 @@ const ListProductSell = () => {
                 size="small"
                 dataSource={filter()}
                 rowSelection={{ ...rowSelection }}
+                bordered
             />
             <ShoppingCart
                 dataSource={selectedItems}

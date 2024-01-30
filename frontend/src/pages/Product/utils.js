@@ -129,43 +129,51 @@ export const PROD_REPORT_COL = (handleDelete) => {
             title: '#',
             dataIndex: 'index',
             key: 'index',
+            width: 25
         },
         {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
+            width: 100
         },
         {
             title: 'Price',
             dataIndex: 'sellingPrice',
             key: 'sellingPrice',
-            render: (r) => formatMoney(r)
+            width:70,
+            render: (r) => formatMoney(r),
         }, {
-            title: 'Stock',
+            title: 'Qty',
             dataIndex: 'quantity',
             key: 'quantity',
-            render: (r) =>formatMoney(r)
+            width:70,
+            render: (r) => formatMoney(r)
         },
         {
-            title: 'Total Sales',
+            title: 'Sales',
             dataIndex: 'total',
             key: 'total',
+            width:70,
             render: (r) => formatMoney(r)
         },
         {
-            title: 'Total Profit',
+            title: 'Profit',
             dataIndex: 'profit',
             key: 'profit',
+            width:70,
             render: (r) => formatMoney(r)
         },
         {
-            title: 'createdAt',
+            title: 'Date',
             dataIndex: 'createdAt',
             key: 'createdAt',
+            width:90,
             render: (r) => formatDMY(r)
         },
         {
             key: 'delete',
+            width:50,
             render: (r) => handleDelete(r)
         }
     ];
@@ -177,9 +185,9 @@ const formatDMY = (date) => {
     return `${d[2]}/${d[1]}/${d[0]}`;
 }
 
-const formatMoney = (r)=>{
+const formatMoney = (r) => {
     return (
-        <div style={{textAlign: "right"}}>{ parseInt(r).toLocaleString()}</div>
+        <div style={{ textAlign: "right" }}>{parseInt(r).toLocaleString()}</div>
     )
 }
 
@@ -193,7 +201,14 @@ export const deleteComponent = (record, id, showConfirmDelete, isDeleting, confi
             okButtonProps={{ loading: isDeleting, }}
             onCancel={() => setConfirmDelete(false)}
         >
-            <Button type="link" onClick={() => confirmDelete(record._id)}><DeleteOutlined /></Button>
+            <Button type="link" onClick={() => confirmDelete(record._id)} style={{
+                display: 'inline-block',
+                textAlign: 'center',
+                padding: 0,
+                height: 0,
+                width: 0
+            }}><DeleteOutlined style={{ fontSize: "12px"}}/></Button>
         </Popconfirm>
     )
 }
+

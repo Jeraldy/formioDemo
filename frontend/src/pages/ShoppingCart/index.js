@@ -90,6 +90,8 @@ const ShoppingCart = ({ dataSource, isOpen, toggleModel, setItems }) => {
                 bordered
                 dataSource={dataSource}
                 columns={columns}
+                size='small'
+                scroll={{x: 'calc(300px + 50%)'}}
             />
             <strong>Total Price: TZS {total.toLocaleString()}/= </strong>
         </Modal>

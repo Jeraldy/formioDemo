@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Popconfirm, notification, message } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { DeleteProduct, GetProducts } from '../../../api/Product';
+import { DeleteProduct } from '../../../api/Product';
 import { PROD_COL } from '../utils';
 import AddNewProduct from '../Forms/AddNewProduct';
+import { fetchProducts } from '../../../api/utils';
 
 
 const ListProduct = () => {
@@ -46,16 +47,7 @@ const ListProduct = () => {
 
     useEffect(() => {
         setSelectedProduct(null);
-        const fetchData = async () => {
-            const response = await GetProducts();
-            if (response?.data) {
-                const d = response.data.map((k, i) => {
-                    return { ...k, index: i + 1, key: k.name }
-                })
-                setData(d)
-            }
-        }
-        fetchData();
+        fetchProducts(setData)
     }, [refresh]);
 
     const deleteComp = (r) => {
@@ -99,6 +91,7 @@ const ListProduct = () => {
                 columns={PROD_COL(deleteComp, editComp)}
                 size="small"
                 dataSource={data}
+                bordered
             />
             <AddNewProduct
                 isOpen={isModalOpen}
