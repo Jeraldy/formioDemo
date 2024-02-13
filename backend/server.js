@@ -10,7 +10,7 @@ if (env === 'prod') {
 } else if (env === 'test') {
     dbConnection = process.env.DATABASE_TEST;
 }
-
+console.log({ dbConnection })
 mongoose.connect(dbConnection, { useNewUrlParser: true })
     .then(_ => {
         console.log("Db connection was successfuly")
