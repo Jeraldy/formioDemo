@@ -48,10 +48,6 @@ const ListProductSold = () => {
     }
 
     useEffect(() => {
-        handleSearch();
-    }, [refresh]);
-
-    useEffect(() => {
         if (searchValues.criteria !== selectCriteria[0].value) {
             const func = selectCriteria
                 .filter(v => v.value === searchValues.criteria)[0].func;
@@ -100,6 +96,11 @@ const ListProductSold = () => {
         query[`createdAt[lt]`] = end;
         fetchSoldProducts(setData, query, searchValues.keywords);
     }
+
+    
+    useEffect(() => {
+        handleSearch();
+    }, [refresh,handleSearch]);
 
     return (
         <div>
