@@ -20,7 +20,7 @@ const LoginPage = () => {
         authState: { ...response.data },
       })) {
         localStorage.setItem('token', response.token);
-        localStorage.setItem('role', response.data.role)
+        localStorage.setItem('role', response.data.role);
         navigate('/')
       } else {
         message.error("Invalid username or password");

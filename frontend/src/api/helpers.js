@@ -37,5 +37,5 @@ export const makeApiCall = async (method, path, body) => {
   return Promise.resolve();
 };
 
-const localUrl = (path) => `http://localhost:8080/api/v1/${path}`;
+const localUrl = (path) => `http://localhost:8080/api/v1/`;
 const url = (path) => `${process.env.BASE_URL || localUrl(path)}${path}`;
