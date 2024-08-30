@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const app = require('./app')
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8081;
 const env = process.env.NODE_ENV || 'dev';
 
 let dbConnection = "mongodb+srv://root:trojan100@nunua.j5u3vdw.mongodb.net/ecommerce?retryWrites=true&w=majority";
