@@ -10,7 +10,7 @@ router
 .get(controller.getAllSells)
 .post(
     authController.protect,
-    authController.restrictTo('admin'),
+    authController.restrictTo('admin','shopkeeper'),
     controller.validateSell,
     controller.decrementProduct,
     controller.createSell);
