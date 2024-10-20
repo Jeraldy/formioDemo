@@ -1,10 +1,10 @@
-# UBS
+## Form Builder Demo
 
 Running the app
 - docker-compose up --build
 
 
-# CREATE ADMIN USER
+### Create admin user
 curl -X POST http://localhost:8090/api/v1/user/signup \
 -H "Content-Type: application/json" \
 -d '{
@@ -15,8 +15,8 @@ curl -X POST http://localhost:8090/api/v1/user/signup \
     "role": "user"
 }'
 
-# Edit user role in the database 
-Use mongoDB Compass to Access database
+### Edit user role in the database 
+Use mongoDB Compass to Access database\
 Connection string
-  -  mongodb://localhost:27018/
+  - mongodb://localhost:27018/
   - Users table change  "role": "user" => "role": "admin"
