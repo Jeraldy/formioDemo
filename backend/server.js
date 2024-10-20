@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 const app = require('./app')
+require('dotenv').config();
 
-const port = process.env.PORT || 8081;
+const port = process.env.PORT || 8080;
 const env = process.env.NODE_ENV || 'dev';
 
 if (env === 'prod') {
     dbConnection = process.env.DATABASE_PROD;
 } else{
-    dbConnection = process.env.DATABASE_TEST || "mongodb://127.0.0.1:27017/ecommerce";
+    dbConnection = process.env.DATABASE_TEST;
 }
 
 mongoose.set('strictQuery', true);

@@ -4,7 +4,7 @@ services:
   mongodb-dev:
     image: mongo:6.0
     ports:
-      - 27017:27017
+      - 27018:27017
     volumes:
       - ./data:/data/db
 
@@ -14,13 +14,14 @@ services:
       dockerfile: Dockerfile.dev
     command: [ "bash", "-c", "yarn start" ]
     environment:
-      - DATABASE_DEV=mongodb://mongodb-dev:27017/ecommerce
+      - PORT=8090
+      - DATABASE_TEST=mongodb://mongodb-dev:27017/ubs
       - NODE_ENV=dev
       - JWT_SECRET=DaoxGNGbKX9fPhKg3G9LStWEsAG2C6
       - JWT_EXPIRES_IN=90d
       - JWT_COOKIE_EXPIRES_IN=90
     ports:
-      - "8080:8080"
+      - "8090:8090"
     depends_on:
       - mongodb-dev
     restart: always
@@ -32,12 +33,13 @@ services:
   frontend-dev:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     command: [ "bash", "-c", "yarn start" ]
     environment:
-      - PORT=3001
+      - PORT=3002
+      - BACKEND_PORT=8090
     ports:
-      - "3001:3001"
+      - "3002:3002"
     depends_on:
       - backend-dev
     restart: always

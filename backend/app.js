@@ -1,45 +1,31 @@
 const express = require('express');
-const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const helmet = require('helmet');
 const cors = require('cors')
-// const hpp = require('hpp')
 const userRouter = require('./routers/user.routes');
-const productRouter = require('./routers/product.routes');
+const formsRouter = require('./routers/forms.routes');
+const formDataRouter = require('./routers/formdata.routes');
 
 const AppError = require('./utils/app.error');
 const globalErrorHandler = require('./controllers/error.controller');
-
 
 const app = express();
 
 app.use(helmet());
 app.use(express.json());
 
-// Limit requests from same API
-// const limiter = rateLimit({
-//     max: 1000, //num of requests
-//     windowMs: 60 * 60 * 1000, // Per one hour
-//     message: 'Too many requests from this IP, please try again in an hour!'
-// });
-// app.use('/api', limiter);
-
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
 // Data sanitization against XSS
 app.use(xss());
-// Prevent parameter pollution
-//app.use(hpp());
-
-// 1) GLOBAL MIDDLEWARES
-// Implement CORS
 app.use(cors());
 // Access-Control-Allow-Origin *
 app.options('*', cors());
 
 app.use('/api/v1/user', userRouter);
-app.use('/api/v1/product', productRouter);
+app.use('/api/v1/forms', formsRouter);
+app.use('/api/v1/formdata', formDataRouter);
 
 app.use('/health', (req, res, next) => {
     res.status(200).json({

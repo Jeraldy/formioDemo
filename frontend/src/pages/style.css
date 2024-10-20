@@ -1,17 +1,52 @@
-.menu{
-    display: flex;
-    flex-wrap: wrap;
-    height: 100vh;
-}
+    General Form Styling
+    .formio-form {
+        background-color: #f4f6f8;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 600px;
+        margin: 0 auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-.menu-item{
-    width: 49.5%;
-    border: 1px solid white;
-    text-align: center;
-    font-weight: bold;
-    background-color: rgb(233, 194, 233);
-}
+    /* Input fields */
+    .form-control {
+        border-radius: 4px;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 1rem;
+        margin-bottom: 15px;
+    }
 
-.menu-item:hover{
-    background-color: aliceblue;
-}
+    /* Labels */
+    label {
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    /* Buttons */
+    .btn {
+        background-color: #6200ea;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #3700b3;
+    }
+
+    /* Error and Validation Styling */
+    .has-error .form-control {
+        border-color: #e53935;
+    }
+
+    .error-message {
+        color: #e53935;
+        font-size: 0.85rem;
+    }

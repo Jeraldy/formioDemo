@@ -1,30 +1,6 @@
 import { message, notification } from "antd";
-import { GetProductCategory, GetProductSell, GetProductSubCategory, GetProducts } from "./Product";
+import FormsApi from "./FormsApi";
 
-export const fetchSoldProducts = async (callback, params, keywords='') => {
-    const query = new URLSearchParams(params).toString()
-    const response = await GetProductSell(query);
-    if (response?.data) {
-        const d = response.data
-            .filter(k => k.productId != null)
-            .filter(row => JSON.stringify(row).includes(keywords))
-            .map((k, i) => {
-                const totalSellingPrice = (k.quantity * k.sellingPrice)
-                const totalBuyingPrice = (k.quantity * k.productId.buyingPrice)
-                return {
-                    ...k.productId,
-                    _id: k._id,
-                    quantity: k.quantity,
-                    total: totalSellingPrice,
-                    profit: (totalSellingPrice - totalBuyingPrice),
-                    index: i + 1,
-                    key: k.name,
-                    createdAt: k.createdAt
-                }
-            })
-        callback(d)
-    }
-}
 
 export const deleteItem = async (setDeleting, setRefresh, refresh, id, deleteFun) => {
     setDeleting(true);
@@ -45,36 +21,14 @@ export const deleteItem = async (setDeleting, setRefresh, refresh, id, deleteFun
     setDeleting(false);
 }
 
-export const fetchProductCategory = async (callback, params) => {
-    const response = await GetProductCategory();
-    if (response?.data) {
-        const d = response.data.map((k, i) => {
-            return { ...k, index: i + 1, key: k.name, value: k.name }
-        })
-        callback(d)
-    }
-}
 
-export const fetchProducts = async (setData, params) => {
-    const response = await GetProducts();
+export const fetchForms = async (setData, params) => {
+    const response = await FormsApi.GetAll();
     if (response?.data) {
         const d = response.data.map((k, i) => {
-            return { ...k, index: i + 1, key: k.name, value: k.name }
+            return { ...k, index: i + 1, key: k._id }
         })
         setData(d)
-    }
-}
-
-export const fetchProductSubCategory = async (setData, params) => {
-    const response = await GetProductSubCategory();
-    if (response?.data) {
-        const d = response.data.map((k, i) => {
-            return {
-                ...k, index: i + 1,
-                key: k.name, category: k.categoryId.name
-            }
-        })
-        setData(d);
     }
 }
 

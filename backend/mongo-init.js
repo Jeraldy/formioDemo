@@ -1,1 +1,1 @@
-db.createCollection("ecommerce");
+db.createCollection("ubs");

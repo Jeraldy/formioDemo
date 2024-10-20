@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Popconfirm, notification, message } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { DeleteProduct } from '../../../api/Product';
-import { PROD_COL } from '../utils';
-import AddNewProduct from '../Forms/AddNewProduct';
-import { fetchProducts } from '../../../api/utils';
+import { DeleteOutlined, EditOutlined, EyeOutlined, FolderOpenOutlined } from '@ant-design/icons';
+import FormsApi from '../api/FormsApi';
+import { LIST_FORMS_COLUMNS } from './utils';
+import { fetchForms } from '../api/utils';
+import { useNavigate } from 'react-router-dom';
+import ViewFormData from './ViewFormData';
 
-
-const ListProduct = () => {
-
-    const [data, setData] = useState([]);
+const ListCreatedForms = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [data, setData] = useState([]);
+    const [selectedFormId, setSelectedFormId] = useState();
     const [refresh, setRefresh] = useState(false);
     const [showConfirmDelete, setConfirmDelete] = useState(false);
     const [isDeleting, setDeleting] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState();
     const [id, setId] = useState(0);
+    const navigate = useNavigate();
 
     const showModal = () => {
         setIsModalOpen(!isModalOpen);
@@ -24,7 +24,7 @@ const ListProduct = () => {
     const handleDelete = async () => {
         setDeleting(true);
         try {
-            const request = await DeleteProduct(id);
+            const request = await FormsApi.DeleteOne(id);
             if (request.status === "success") {
                 setRefresh(!refresh);
                 notification.open({
@@ -46,8 +46,7 @@ const ListProduct = () => {
     }
 
     useEffect(() => {
-        setSelectedProduct(null);
-        fetchProducts(setData)
+        fetchForms(setData)
     }, [refresh]);
 
     const deleteComp = (r) => {
@@ -65,42 +64,60 @@ const ListProduct = () => {
         )
     }
 
-    const handleEdit = (product)=>{
-        setSelectedProduct(product);
-        showModal();
-    }
-
     const editComp = (r) => {
         return (
-            <Button type="link" onClick={() => handleEdit(r)}><EditOutlined /></Button>
+            <Button type="link" onClick={() => navigate(`/builder/${r._id}`)}><EditOutlined /></Button>
+        )
+    }
+
+    const viewComp = (r) => {
+        return (
+            <Button type="link" onClick={() => navigate(`/render/${r._id}`)}><EyeOutlined /></Button>
+        )
+    }
+
+    const viewDataComp = (r) => {
+        return (
+            <Button type="link"
+                onClick={() => {
+                    setSelectedFormId(r._id)
+                    showModal()
+                }}>
+                <FolderOpenOutlined />
+            </Button>
         )
     }
 
     return (
-        <div>
+        <div style={{
+            padding: '10px',
+            backgroundColor: 'white',
+            borderRadius: '8px'
+        }}>
             <div style={{
                 display: "flex",
-                justifyContent: "space-between",
-                paddingRight: "10px",
+                justifyContent: "end",
+                padding: "10px",
             }}>
-                <Button type="primary" onClick={showModal}>
-                    Add
+                <Button type="primary" onClick={() => navigate('/builder')}>
+                    Add New Form
                 </Button>
             </div>
             <Table
-                columns={PROD_COL(deleteComp, editComp)}
+                columns={LIST_FORMS_COLUMNS(
+                    deleteComp, editComp, viewComp, viewDataComp
+                )}
                 size="small"
                 dataSource={data}
                 bordered
             />
-            <AddNewProduct
+            <ViewFormData
                 isOpen={isModalOpen}
                 toggleModel={showModal}
-                refresh={() => setRefresh(!refresh)}
-                product={selectedProduct}
+                id={selectedFormId}
             />
         </div>
     );
 }
 
-export default ListProduct;
+export default ListCreatedForms;

@@ -1,4 +1,6 @@
 
+const URL = `http://${window.location.hostname}:8090/api/v1`;
+
 export const makeApiCallAuthenticated = async (method, path, body) => {
   try {
     const headers = {
@@ -10,7 +12,7 @@ export const makeApiCallAuthenticated = async (method, path, body) => {
     const params = { method, headers, body: JSON.stringify(body), }
     if (["GET", "DELETE"].includes(method)) delete params.body;
 
-    const response = await fetch(url(path), params);
+    const response = await fetch(`${URL}/${path}`, params);
     if (method === "DELETE" && response.ok) {
       return { status: "success" }
     }
@@ -23,7 +25,7 @@ export const makeApiCallAuthenticated = async (method, path, body) => {
 
 export const makeApiCall = async (method, path, body) => {
   try {
-    const response = await fetch(url(path), {
+    const response = await fetch(`${URL}/${path}`, {
       method, body: JSON.stringify(body),
       headers: {
         'Accept': 'application/json, text/plain, */*',
@@ -37,5 +39,13 @@ export const makeApiCall = async (method, path, body) => {
   return Promise.resolve();
 };
 
-const localUrl = (path) => `http://localhost:8080/api/v1/`;
-const url = (path) => `${process.env.BASE_URL || localUrl(path)}${path}`;
+
+export const CrudApi = (path) => {
+  return {
+    Create: (payload) => makeApiCallAuthenticated('POST', path, payload),
+    Update: (id, payload) => makeApiCallAuthenticated('PATCH', `${path}/${id}`, payload),
+    GetAll: (params='') => makeApiCallAuthenticated('GET', `${path}/?${params}`, {}),
+    GetOne: (id) => makeApiCallAuthenticated('GET', `${path}/${id}`, {}),
+    DeleteOne: (id) => makeApiCallAuthenticated('DELETE', `${path}/${id}`, {})
+  }
+}
