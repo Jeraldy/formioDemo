@@ -3,6 +3,11 @@
 Running the app
 - docker-compose up --build
 
+Access backend here
+ - http://localhost:8090
+
+Access frontend here
+ - http://localhost:3002
 
 ### Create admin user
 curl -X POST http://localhost:8090/api/v1/user/signup \
