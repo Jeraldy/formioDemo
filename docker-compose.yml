@@ -39,7 +39,7 @@ services:
       - PORT=3002
       - BACKEND_PORT=8090
     ports:
-      - "3002:3002"
+      - "80:3002"
     depends_on:
       - backend-dev
     restart: always
