@@ -51,6 +51,47 @@ export const LIST_FORMS_COLUMNS = (handleDelete, handleEdit, handleView,viewData
     return columns;
 }
 
+export const LIST_WORKFLOW_COLUMNS = (handleDelete, handleEdit, handleView,viewDataComp) => {
+    let columns = [
+        {
+            title: '#',
+            dataIndex: 'index',
+            key: 'index',
+            width: 10
+        },
+        {
+            title: 'WorkFlow Name',
+            dataIndex: 'workflowName',
+            key: 'name',
+        }
+    ];
+    if (handleEdit) {
+        columns.push({
+            key: 'y',
+            width: 10,
+            render: (r) => handleEdit(r)
+        })
+    }
+    if (handleDelete) {
+        columns.push({
+            key: 'x',
+            width: 10,
+            render: (r) => handleDelete(r)
+        })
+    }
+
+
+    if (handleView) {
+        columns.push({
+            title: 'Workflow',
+            key: 'k',
+            width: 10,
+            render: (r) => handleView(r)
+        })
+    }
+    return columns;
+}
+
 export const deleteComponent = (record, id, showConfirmDelete, 
     isDeleting, confirmDelete, setConfirmDelete, handleDelete) => {
     return (

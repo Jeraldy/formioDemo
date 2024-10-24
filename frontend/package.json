@@ -10,6 +10,8 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.4.6",
+    "bpmn-js": "^17.11.1",
+    "bpmn-js-properties-panel": "^5.25.0",
     "date-fns": "^3.3.1",
     "formiojs": "^4.21.5",
     "react": "^18.2.0",

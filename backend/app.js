@@ -9,6 +9,7 @@ const formDataRouter = require('./routers/formdata.routes');
 
 const AppError = require('./utils/app.error');
 const globalErrorHandler = require('./controllers/error.controller');
+const workflowRouter = require('./routers/workflow.routes');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.options('*', cors());
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/forms', formsRouter);
 app.use('/api/v1/formdata', formDataRouter);
+app.use('/api/v1/workflow', workflowRouter);
 
 app.use('/health', (req, res, next) => {
     res.status(200).json({

@@ -1,5 +1,6 @@
 import { message, notification } from "antd";
 import FormsApi from "./FormsApi";
+import WorkFlowApi from "./WorkFlowApi";
 
 
 export const deleteItem = async (setDeleting, setRefresh, refresh, id, deleteFun) => {
@@ -24,6 +25,16 @@ export const deleteItem = async (setDeleting, setRefresh, refresh, id, deleteFun
 
 export const fetchForms = async (setData, params) => {
     const response = await FormsApi.GetAll();
+    if (response?.data) {
+        const d = response.data.map((k, i) => {
+            return { ...k, index: i + 1, key: k._id }
+        })
+        setData(d)
+    }
+}
+
+export const fetchWorkFlows = async (setData, params) => {
+    const response = await WorkFlowApi.GetAll();
     if (response?.data) {
         const d = response.data.map((k, i) => {
             return { ...k, index: i + 1, key: k._id }

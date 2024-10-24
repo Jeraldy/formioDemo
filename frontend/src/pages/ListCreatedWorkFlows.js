@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Popconfirm, notification, message } from 'antd';
 import { DeleteOutlined, EditOutlined, EyeOutlined, FolderOpenOutlined } from '@ant-design/icons';
-import FormsApi from '../api/FormsApi';
-import { LIST_FORMS_COLUMNS } from './utils';
-import { fetchForms } from '../api/utils';
+import WorkFlowApi from '../api/WorkFlowApi';
+import { LIST_WORKFLOW_COLUMNS } from './utils';
+import { fetchWorkFlows } from '../api/utils';
 import { useNavigate } from 'react-router-dom';
 import ViewFormData from './ViewFormData';
 
-const ListCreatedForms = () => {
+const ListCreatedWorkFlows = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [data, setData] = useState([]);
     const [selectedFormId, setSelectedFormId] = useState();
@@ -24,7 +24,7 @@ const ListCreatedForms = () => {
     const handleDelete = async () => {
         setDeleting(true);
         try {
-            const request = await FormsApi.DeleteOne(id);
+            const request = await WorkFlowApi.DeleteOne(id);
             if (request.status === "success") {
                 setRefresh(!refresh);
                 notification.open({
@@ -46,7 +46,7 @@ const ListCreatedForms = () => {
     }
 
     useEffect(() => {
-        fetchForms(setData)
+        fetchWorkFlows(setData)
     }, [refresh]);
 
     const deleteComp = (r) => {
@@ -66,13 +66,13 @@ const ListCreatedForms = () => {
 
     const editComp = (r) => {
         return (
-            <Button type="link" onClick={() => navigate(`/form-builder/${r._id}`)}><EditOutlined /></Button>
+            <Button type="link" onClick={() => navigate(`/workflow-builder/${r._id}`)}><EditOutlined /></Button>
         )
     }
 
     const viewComp = (r) => {
         return (
-            <Button type="link" onClick={() => navigate(`/form-render/${r._id}`)}><EyeOutlined /></Button>
+            <Button type="link" onClick={() => navigate(`/workflow-render/${r._id}`)}><EyeOutlined /></Button>
         )
     }
 
@@ -99,12 +99,14 @@ const ListCreatedForms = () => {
                 justifyContent: "end",
                 padding: "10px",
             }}>
-                <Button type="primary" onClick={() => navigate('/form-builder')}>
+                <Button type="primary" onClick={() => navigate('/workflow-builder')}>
                     Add New Form
                 </Button>
             </div>
             <Table
-                columns={LIST_FORMS_COLUMNS(deleteComp, editComp, viewComp, viewDataComp)}
+                columns={LIST_WORKFLOW_COLUMNS(
+                    deleteComp, editComp, viewComp, viewDataComp
+                )}
                 size="small"
                 dataSource={data}
                 bordered
@@ -118,4 +120,4 @@ const ListCreatedForms = () => {
     );
 }
 
-export default ListCreatedForms;
+export default ListCreatedWorkFlows;

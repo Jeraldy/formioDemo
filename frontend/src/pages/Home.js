@@ -2,10 +2,12 @@ import React from 'react';
 import { Tabs } from 'antd';
 import ListCreatedForms from './ListCreatedForms';
 import PageHeader from './PageHeader';
+import ListCreatedWorkFlows from './ListCreatedWorkFlows';
 
 
 const pages = [
   { c: <ListCreatedForms />, l: "CREATED FORMS" },
+  { c: <ListCreatedWorkFlows />, l: "CREATED WORKFLOWS" },
 ]
 
 const Home = () => {
