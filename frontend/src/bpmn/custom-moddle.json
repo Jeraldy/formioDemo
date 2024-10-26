@@ -1,0 +1,22 @@
+{
+    "name": "CustomProperties",
+    "uri": "http://custom-properties",
+    "prefix": "custom",
+    "xml": {
+      "tagAlias": "lowerCase"
+    },
+    "types": [
+      {
+        "name": "CustomElement",
+        "extends": ["bpmn:BaseElement"],
+        "properties": [
+          {
+            "name": "customDropdown",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
+      }
+    ]
+  }
+  

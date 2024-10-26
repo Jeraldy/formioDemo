@@ -100,7 +100,7 @@ const ListCreatedWorkFlows = () => {
                 padding: "10px",
             }}>
                 <Button type="primary" onClick={() => navigate('/workflow-builder')}>
-                    Add New Form
+                    Add New Workflow
                 </Button>
             </div>
             <Table

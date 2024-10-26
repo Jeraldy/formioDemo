@@ -10,6 +10,10 @@ import zeebeModdle from 'zeebe-bpmn-moddle/resources/zeebe';
 // Camunda 8 behaviors
 import ZeebeBehaviorsModule from 'camunda-bpmn-js-behaviors/lib/camunda-cloud';
 
+// For adding custome properties
+import CustomPropertiesProvider from './CustomPropertiesProvider';
+import customModdle from './custom-moddle.json';
+
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 
@@ -56,10 +60,15 @@ const BpmnModelerComponent = ({ diagramXML, onChange }) => {
         BpmnPropertiesPanelModule,
         BpmnPropertiesProviderModule,
         ZeebePropertiesProviderModule,
-        ZeebeBehaviorsModule
+        ZeebeBehaviorsModule,
+        {
+          __init__: ['customPropertiesProvider'],
+          customPropertiesProvider: ['type', CustomPropertiesProvider]
+        }
       ],
       moddleExtensions: {
-        zeebe: zeebeModdle
+        zeebe: zeebeModdle,
+        custom: customModdle
       }
     });
     bpmnModeler.current.importXML(diagramXML || sampleDiagram).catch(console.error);

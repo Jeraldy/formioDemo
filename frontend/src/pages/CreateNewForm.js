@@ -79,6 +79,7 @@ const CreateNewForm = () => {
                 placeholder='Enter form name'
                 value={formName}
                 onChange={(e) => setFormName(e.target.value)}
+                style={{ width: '300px' }}
               />
             </div>
             <div><Button type="primary" onClick={handleSave}>

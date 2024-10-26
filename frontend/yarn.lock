@@ -1260,7 +1260,7 @@
     "@codemirror/language" "^6.10.0"
     lezer-feel "^1.2.3"
 
-"@bpmn-io/properties-panel@>= 3.7":
+"@bpmn-io/properties-panel@^3.24.1", "@bpmn-io/properties-panel@>= 3.7":
   version "3.24.1"
   resolved "https://registry.npmjs.org/@bpmn-io/properties-panel/-/properties-panel-3.24.1.tgz"
   integrity sha512-nEQZ/fVjuQM+nVvmenn0ha/Q+LM3HVe8b9ZhmOpmUn8jQRU9uotiMyE06Q7j3Hi1+82/cQNmy3SuSAoPfXWxfA==
@@ -3685,7 +3685,7 @@ camelize@^1.0.0:
     ids "^1.0.0"
     min-dash "^4.0.0"
 
-"camunda-bpmn-moddle@>= 7":
+camunda-bpmn-moddle@^7.0.1, "camunda-bpmn-moddle@>= 7":
   version "7.0.1"
   resolved "https://registry.npmjs.org/camunda-bpmn-moddle/-/camunda-bpmn-moddle-7.0.1.tgz"
   integrity sha512-Br8Diu6roMpziHdpl66Dhnm0DTnCFMrSD9zwLV08LpD52QA0UsXxU87XfHf08HjuB7ly0Hd1bvajZRpf9hbmYQ==

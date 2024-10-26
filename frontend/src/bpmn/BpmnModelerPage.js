@@ -11,6 +11,7 @@ const BpmnModelerPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
+
   useEffect(() => {
     if (id) {
       const fetchWorkflowToEdit = async () => {
@@ -18,9 +19,9 @@ const BpmnModelerPage = () => {
         const data = response?.data
         if (data) {
           const workflowObject = data.workflowObject
-          .replace(/&lt;/g, '<')
-          .replace(/&gt;/g, '>')
-          .replace(/&amp;/g, '&');
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&');
           setInitWorkflowObject(workflowObject);
           handleSchemaChange(workflowObject);
           setWorkflowName(data.workflowName);
@@ -31,7 +32,7 @@ const BpmnModelerPage = () => {
   }, [id, setInitWorkflowObject, setWorkflowName]);
 
   const handleSchemaChange = (schema) => {
-    localStorage.setItem('workflowObject', schema)
+    localStorage.setItem('workflowObject', schema);
   }
 
   const handleSave = async () => {
@@ -61,7 +62,6 @@ const BpmnModelerPage = () => {
     }
   };
 
-
   return (
     <div>
       <PageHeader />
@@ -82,7 +82,7 @@ const BpmnModelerPage = () => {
                 placeholder='Enter workflow name'
                 value={workflowName}
                 onChange={(e) => setWorkflowName(e.target.value)}
-                style={{width:'300px'}}
+                style={{ width: '300px' }}
               />
             </div>
             <div><Button type="primary" onClick={handleSave}>
